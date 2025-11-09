@@ -1,0 +1,82 @@
+
+/frontend/node_modules
+.npm-cache/
+dist/
+frontend/dist
+backend/.env
+# ------------------------
+# Rust build and cargo
+# ------------------------
+**/target/
+Library/
+**/*.rs.bk
+
+/build/
+/out/
+
+# Rustup and cargo local files
+.cargo/
+rust-toolchain.toml
+rustfmt.toml
+
+# ------------------------
+# Editor & IDE settings
+# ------------------------
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# Cursor (AI code editor)
+.cursor/
+.cursor-backup/
+*.cursor-tmp
+*.cursor-session
+
+# JetBrains
+.idea/       
+*.iml
+
+
+# ------------------------
+# macOS system files
+# ------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+__MACOSX/
+
+# Thumbnails
+._*
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# ------------------------
+# Temporary / OS files
+# ------------------------
+*.swp
+*.swo
+*~
+*.tmp
+*.log
+*.bak
+*.orig
+
+# ------------------------
+# Testing and profiling
+# ------------------------
+/coverage/
+/profiler/
+*.profraw
+*.profdata
+
+# ------------------------
+# Environment / secrets
+# ------------------------
+.env
+.env.*
+!.env.example
+**/*.env
