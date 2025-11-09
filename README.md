@@ -3,14 +3,20 @@
 ## Overview
 MovieVault is a web-based application for curating, displaying, and managing a personal or shared movie collection. The system stores rich metadata, including genres, people, roles, ownership details, and imagery, exposing CRUD APIs through a Rust backend and a responsive React frontend. Deployment targets an Apache web server that serves the compiled UI and proxies API traffic to the backend service.
 
-## Project Structure
-- `backend/` — Actix Web application scaffolded in Rust with a `/api/health` endpoint.
-- `frontend/` — Vite + React TypeScript app with a service status dashboard and proxy configuration for the backend.
-- `docs/` — Product specification, architecture diagrams, database schema, and task plans.
-- `infra/env/` — Environment variable templates for local Docker-based development.
-- `docker-compose.yml` — Development stack for MySQL, backend, and frontend containers (idle by default until commands are customised).
+## Current Project Status
+- Repository contains planning documentation only; implementation work has not started yet.
+- Top-level scaffolding directories (`backend/`, `frontend/`, `infra/`) are present but empty.
+- Detailed product, architecture, and database plans live in the `docs/` directory.
 
-## Development Environment Setup
+## Project Structure
+- `backend/` — Placeholder for the upcoming Rust Actix-Web service.
+- `frontend/` — Placeholder for the forthcoming React + TypeScript client.
+- `infra/` — Placeholder for infrastructure tooling (Docker, environment files, deployment scripts).
+- `docs/` — Product specification, architecture overview, database schema, build plan, and task plan.
+
+## Planned Development Environment Setup
+
+> The steps below outline the intended tooling once the backend, frontend, and infrastructure assets are implemented. The referenced files and commands are not available yet and will be created in subsequent tasks.
 
 ### Prerequisites
 - Rust toolchain (`rustup` recommended)
@@ -18,54 +24,21 @@ MovieVault is a web-based application for curating, displaying, and managing a p
 - Docker Desktop or Docker Engine with Compose v2
 
 ### First-Time Setup (Docker)
-1. Copy the environment template and adjust secrets/ports as needed:
-   ```bash
-   cp infra/env/development.env.example .env
-   ```
-2. Start the stack:
-   ```bash
-   docker compose up -d
-   ```
-3. Confirm services are running:
-   ```bash
-   docker compose ps
-   ```
-4. Shell into containers when required:
-   - Backend: `docker compose exec backend bash`
-   - Frontend: `docker compose exec frontend sh`
-
-Both app containers default to `sleep infinity`; update the `command` entries to something like `cargo watch -x run` and `npm run dev` once you are ready to run the services continuously inside Docker.
+Planned deliverables include:
+1. Environment templates under `infra/env/`.
+2. A `docker-compose.yml` coordinating MySQL, backend, and frontend services.
+3. Container commands tailored for development workflows (e.g., `cargo watch`, `npm run dev`).
 
 ### Local Development (Host Tools)
+Once the backend and frontend are scaffolded, the following host-based workflows will be available:
 
-#### Backend
-```bash
-cp backend/env.example backend/.env    # customise as needed
-cargo run --manifest-path backend/Cargo.toml
-```
-
-- Health check: `http://localhost:8080/api/health`
-- Formatting: `cargo fmt --manifest-path backend/Cargo.toml`
-- Type-checking: `cargo check --manifest-path backend/Cargo.toml`
-
-#### Frontend
-```bash
-cd frontend
-cp env.example .env
-npm install
-npm run dev
-```
-
-- Dev server: `http://localhost:3000`
-- Production build: `npm run build`
-- Linting: `npm run lint`
-
-The Vite dev server proxies `/api/*` requests to the backend (see `frontend/vite.config.ts`). For production builds the `VITE_API_BASE_URL` environment variable controls the API origin.
+- Backend: copy `.env` templates, run `cargo run`, and access a `/api/health` endpoint.
+- Frontend: install dependencies via npm, run the Vite dev server, and proxy API traffic to the backend.
+- Shared tooling: linting, formatting, and testing commands for both stacks.
 
 ## Database & Migrations
-- Install Diesel CLI locally: `cargo install diesel_cli --no-default-features --features mysql`
-- Ensure the database container is running: `docker compose up -d db`
-- Migrations (to be added) will live under `backend/migrations/` and can be executed with `diesel migration run`.
+- Diesel CLI installation and usage will be documented when migrations are introduced.
+- Migrations are planned to live under `backend/migrations/` and will align with the schema in `docs/MySQL-Compatible CREATE TABLE Script.md`.
 
 ## Key Features (Planned)
 1. **Display Content** — Browse movie details including metadata, genres, cast/crew, ownership, and imagery.
