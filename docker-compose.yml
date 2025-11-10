@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: movievault-db
+    restart: unless-stopped
+    env_file:
+      - infra/env/development.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-MovieVaultDB}
+      MYSQL_USER: ${MYSQL_USER:-movievault}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-movievault}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: rust:1.82
+    container_name: movievault-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    working_dir: /workspace/backend
+    command: sleep infinity
+    env_file:
+      - infra/env/development.env
+    environment:
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8080
+      DATABASE_URL: ${DATABASE_URL:-mysql://movievault:movievault@db:3306/MovieVaultDB}
+      RUST_LOG: ${RUST_LOG:-info}
+    volumes:
+      - ./:/workspace:cached
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: node:20
+    container_name: movievault-frontend
+    depends_on:
+      - backend
+    working_dir: /workspace/frontend
+    command: sleep infinity
+    env_file:
+      - infra/env/development.env
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080/api}
+    volumes:
+      - ./:/workspace:cached
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:
+

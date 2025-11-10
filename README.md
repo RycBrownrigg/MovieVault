@@ -6,14 +6,15 @@ MovieVault is a web-based application for curating, displaying, and managing a p
 ## Current Project Status
 - Backend: Actix-Web service with `/api/health`, environment-driven configuration, Diesel-based database pool, and embedded migrations.
 - Frontend: Vite + React TypeScript scaffold with React Router, Axios API client, and placeholder screens for home, detail, admin, and add movie flows.
-- Infrastructure: Directory scaffolded; Docker and deployment assets pending.
+- Infrastructure: Docker Compose stack for local development plus shared environment templates.
 - Detailed product, architecture, and database plans live in the `docs/` directory.
 
 ## Project Structure
 - `backend/` — Rust Actix-Web service with Diesel integration and embedded migrations.
 - `frontend/` — Vite + React TypeScript app with routing, API client scaffolding, and placeholder views.
-- `infra/` — Placeholder for infrastructure tooling (Docker, environment files, deployment scripts).
+- `infra/` — Infrastructure assets (Docker Compose env templates, future deployment scripts).
 - `docs/` — Product specification, architecture overview, database schema, build plan, and task plan.
+- `docker-compose.yml` — Local development stack orchestrating MySQL, backend, and frontend containers.
 
 ## Development Environment Setup
 
@@ -61,8 +62,30 @@ Recommended supporting commands:
 - The dev server listens on `http://localhost:3000` and proxies `/api` to the backend.
 - Update `VITE_API_BASE_URL` to point at your backend origin (defaults to `http://localhost:8080/api`).
 
-### Infrastructure (Planned)
-Docker assets and deployment automation will be added in upcoming tasks. Once available, this section will expand with concrete commands for running the local stack and preparing production releases.
+### Infrastructure (Docker Compose)
+1. Copy the shared environment template:
+   ```bash
+   cp infra/env/development.env.example infra/env/development.env
+   ```
+   Adjust credentials/ports as needed.
+2. Start the stack (database + dev containers):
+   ```bash
+   docker compose up -d
+   ```
+3. Containers run in an idle state (`sleep infinity`) so you can exec in and start dev tooling manually:
+   ```bash
+   docker compose exec backend bash   # run cargo commands
+   docker compose exec frontend sh    # run npm commands
+   ```
+4. Tear down the stack (preserves database volume):
+   ```bash
+   docker compose down
+   ```
+
+Services:
+- `db`: MySQL 8.4 with persistent volume `db_data`.
+- `backend`: Rust toolchain image mounting the workspace; configure `cargo watch` or `cargo run` as needed.
+- `frontend`: Node 20 image mounting the workspace; run `npm run dev` inside the container.
 
 ## Database & Migrations
 - Install Diesel CLI locally with MySQL support:
