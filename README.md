@@ -4,8 +4,9 @@
 MovieVault is a web-based application for curating, displaying, and managing a personal or shared movie collection. The system stores rich metadata, including genres, people, roles, ownership details, and imagery, exposing CRUD APIs through a Rust backend and a responsive React frontend. Deployment targets an Apache web server that serves the compiled UI and proxies API traffic to the backend service.
 
 ## Current Project Status
-- Repository contains planning documentation only; implementation work has not started yet.
-- Top-level scaffolding directories (`backend/`, `frontend/`, `infra/`) are present but empty.
+- Backend: Initial Actix-Web service in place with `/api/health` endpoint, configurable via `.env`.
+- Frontend: Directory scaffolded; implementation pending.
+- Infrastructure: Directory scaffolded; Docker and deployment assets pending.
 - Detailed product, architecture, and database plans live in the `docs/` directory.
 
 ## Project Structure
@@ -14,27 +15,30 @@ MovieVault is a web-based application for curating, displaying, and managing a p
 - `infra/` — Placeholder for infrastructure tooling (Docker, environment files, deployment scripts).
 - `docs/` — Product specification, architecture overview, database schema, build plan, and task plan.
 
-## Planned Development Environment Setup
-
-> The steps below outline the intended tooling once the backend, frontend, and infrastructure assets are implemented. The referenced files and commands are not available yet and will be created in subsequent tasks.
+## Development Environment Setup
 
 ### Prerequisites
 - Rust toolchain (`rustup` recommended)
 - Node.js 20.x (ships with npm 11.x)
 - Docker Desktop or Docker Engine with Compose v2
 
-### First-Time Setup (Docker)
-Planned deliverables include:
-1. Environment templates under `infra/env/`.
-2. A `docker-compose.yml` coordinating MySQL, backend, and frontend services.
-3. Container commands tailored for development workflows (e.g., `cargo watch`, `npm run dev`).
+### Backend (Actix-Web)
+1. Copy the example environment file and adjust host/port as needed:
+   ```bash
+   cp backend/env.example backend/.env
+   ```
+2. Run the development server:
+   ```bash
+   cargo run --manifest-path backend/Cargo.toml
+   ```
+3. Health check: `http://localhost:8080/api/health`
 
-### Local Development (Host Tools)
-Once the backend and frontend are scaffolded, the following host-based workflows will be available:
+Recommended supporting commands:
+- Formatting: `cargo fmt --manifest-path backend/Cargo.toml`
+- Type-checking: `cargo check --manifest-path backend/Cargo.toml`
 
-- Backend: copy `.env` templates, run `cargo run`, and access a `/api/health` endpoint.
-- Frontend: install dependencies via npm, run the Vite dev server, and proxy API traffic to the backend.
-- Shared tooling: linting, formatting, and testing commands for both stacks.
+### Frontend & Infrastructure (Planned)
+Documentation, Docker assets, and frontend scaffolding will be added in upcoming tasks. Once available, this section will expand with concrete commands for running the Vite dev server, executing linters/tests, and managing the local Docker stack.
 
 ## Database & Migrations
 - Diesel CLI installation and usage will be documented when migrations are introduced.
