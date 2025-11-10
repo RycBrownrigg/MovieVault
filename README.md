@@ -5,13 +5,13 @@ MovieVault is a web-based application for curating, displaying, and managing a p
 
 ## Current Project Status
 - Backend: Actix-Web service with `/api/health`, environment-driven configuration, Diesel-based database pool, and embedded migrations.
-- Frontend: Directory scaffolded; implementation pending.
+- Frontend: Vite + React TypeScript scaffold with React Router, Axios API client, and placeholder screens for home, detail, admin, and add movie flows.
 - Infrastructure: Directory scaffolded; Docker and deployment assets pending.
 - Detailed product, architecture, and database plans live in the `docs/` directory.
 
 ## Project Structure
-- `backend/` — Placeholder for the upcoming Rust Actix-Web service.
-- `frontend/` — Placeholder for the forthcoming React + TypeScript client.
+- `backend/` — Rust Actix-Web service with Diesel integration and embedded migrations.
+- `frontend/` — Vite + React TypeScript app with routing, API client scaffolding, and placeholder views.
 - `infra/` — Placeholder for infrastructure tooling (Docker, environment files, deployment scripts).
 - `docs/` — Product specification, architecture overview, database schema, build plan, and task plan.
 
@@ -40,8 +40,29 @@ Recommended supporting commands:
 - Linting: `cargo clippy --manifest-path backend/Cargo.toml`
 - Manual migrations: `diesel migration run --manifest-path backend/Cargo.toml`
 
-### Frontend & Infrastructure (Planned)
-Documentation, Docker assets, and frontend scaffolding will be added in upcoming tasks. Once available, this section will expand with concrete commands for running the Vite dev server, executing linters/tests, and managing the local Docker stack.
+### Frontend (Vite + React)
+1. Copy the environment template and set the backend API URL:
+   ```bash
+   cp frontend/env.example frontend/.env
+   ```
+2. Install dependencies (first run only):
+   ```bash
+   cd frontend
+   npm install
+   ```
+3. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+4. Production build output:
+   ```bash
+   npm run build
+   ```
+- The dev server listens on `http://localhost:3000` and proxies `/api` to the backend.
+- Update `VITE_API_BASE_URL` to point at your backend origin (defaults to `http://localhost:8080/api`).
+
+### Infrastructure (Planned)
+Docker assets and deployment automation will be added in upcoming tasks. Once available, this section will expand with concrete commands for running the local stack and preparing production releases.
 
 ## Database & Migrations
 - Install Diesel CLI locally with MySQL support:
