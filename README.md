@@ -4,7 +4,7 @@
 MovieVault is a web-based application for curating, displaying, and managing a personal or shared movie collection. The system stores rich metadata, including genres, people, roles, ownership details, and imagery, exposing CRUD APIs through a Rust backend and a responsive React frontend. Deployment targets an Apache web server that serves the compiled UI and proxies API traffic to the backend service.
 
 ## Current Project Status
-- Backend: Initial Actix-Web service in place with `/api/health` endpoint, configurable via `.env`.
+- Backend: Actix-Web service with `/api/health`, environment-driven configuration, Diesel-based database pool, and embedded migrations.
 - Frontend: Directory scaffolded; implementation pending.
 - Infrastructure: Directory scaffolded; Docker and deployment assets pending.
 - Detailed product, architecture, and database plans live in the `docs/` directory.
@@ -27,22 +27,37 @@ MovieVault is a web-based application for curating, displaying, and managing a p
    ```bash
    cp backend/env.example backend/.env
    ```
-2. Run the development server:
+2. Ensure the `.env` file contains a valid MySQL connection string under `DATABASE_URL`.
+3. Run the development server:
    ```bash
    cargo run --manifest-path backend/Cargo.toml
    ```
-3. Health check: `http://localhost:8080/api/health`
+4. Health check: `http://localhost:8080/api/health`
 
 Recommended supporting commands:
 - Formatting: `cargo fmt --manifest-path backend/Cargo.toml`
 - Type-checking: `cargo check --manifest-path backend/Cargo.toml`
+- Linting: `cargo clippy --manifest-path backend/Cargo.toml`
+- Manual migrations: `diesel migration run --manifest-path backend/Cargo.toml`
 
 ### Frontend & Infrastructure (Planned)
 Documentation, Docker assets, and frontend scaffolding will be added in upcoming tasks. Once available, this section will expand with concrete commands for running the Vite dev server, executing linters/tests, and managing the local Docker stack.
 
 ## Database & Migrations
-- Diesel CLI installation and usage will be documented when migrations are introduced.
-- Migrations are planned to live under `backend/migrations/` and will align with the schema in `docs/MySQL-Compatible CREATE TABLE Script.md`.
+- Install Diesel CLI locally with MySQL support:
+  ```bash
+  cargo install diesel_cli --no-default-features --features mysql
+  ```
+- Update `backend/.env` with a valid `DATABASE_URL`, e.g.:
+  ```
+  DATABASE_URL=mysql://movievault:password@127.0.0.1:3306/MovieVaultDB
+  ```
+- Run setup (creates the database if needed) and apply migrations:
+  ```bash
+  diesel setup --manifest-path backend/Cargo.toml
+  diesel migration run --manifest-path backend/Cargo.toml
+  ```
+- Migrations mirror the schema in `docs/MySQL-Compatible CREATE TABLE Script.md` with an additional `users` table for authentication support.
 
 ## Key Features (Planned)
 1. **Display Content** — Browse movie details including metadata, genres, cast/crew, ownership, and imagery.
